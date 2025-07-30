@@ -78,7 +78,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
             )}
             
             <div 
-                className="prose prose-lg mx-auto max-w-3xl text-muted-foreground dark:prose-invert prose-p:text-justify"
+                className="prose prose-lg mx-auto max-w-3xl text-foreground dark:prose-invert prose-p:text-justify"
                 dangerouslySetInnerHTML={{ __html: post.excerpt }}
             />
         </article>
