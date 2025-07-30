@@ -25,7 +25,6 @@ import { Post } from './article-card';
 
 const postFormSchema = z.object({
   title: z.string().min(1, 'Title is required.'),
-  slug: z.string().min(1, 'Slug is required.').regex(/^[a-z0-9-]+$/, 'Slug can only contain lowercase letters, numbers, and hyphens.'),
   excerpt: z.string().min(1, 'Excerpt is required.'),
   tags: z.string().min(1, 'Tags are required.'),
   date: z.string().min(1, 'Date is required.'),
@@ -37,6 +36,15 @@ interface PostFormProps {
   post?: Post | null;
 }
 
+const generateSlug = (title: string) => {
+    return title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '') // remove special chars
+        .replace(/\s+/g, '-')           // replace spaces with hyphens
+        .replace(/-+/g, '-');            // remove consecutive hyphens
+};
+
+
 export default function PostForm({ post }: PostFormProps) {
   const router = useRouter();
   const { toast } = useToast();
@@ -45,7 +53,6 @@ export default function PostForm({ post }: PostFormProps) {
 
   const defaultValues: Partial<PostFormValues> = {
       title: post?.title || '',
-      slug: post?.slug || '',
       excerpt: post?.excerpt || '',
       tags: post?.tags?.join(', ') || '',
       date: post?.date || new Date().toISOString().split('T')[0],
@@ -60,6 +67,8 @@ export default function PostForm({ post }: PostFormProps) {
   const onSubmit = async (data: PostFormValues) => {
     setIsLoading(true);
     try {
+        const slug = isEditMode ? post.slug : generateSlug(data.title);
+
         const postData = {
             title: data.title,
             excerpt: data.excerpt,
@@ -67,15 +76,14 @@ export default function PostForm({ post }: PostFormProps) {
             date: data.date,
         };
 
+        const docRef = doc(db, 'posts', slug);
         if (isEditMode) {
-            const docRef = doc(db, 'posts', post.slug);
             await setDoc(docRef, postData, { merge: true });
             toast({
                 title: 'Post Updated',
                 description: 'Your blog post has been successfully updated.',
             });
         } else {
-            const docRef = doc(db, 'posts', data.slug);
             await setDoc(docRef, postData);
             toast({
                 title: 'Post Created',
@@ -114,22 +122,6 @@ export default function PostForm({ post }: PostFormProps) {
                     <FormControl>
                       <Input placeholder="The Dawn of AI" {...field} />
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="slug"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Slug</FormLabel>
-                    <FormControl>
-                      <Input placeholder="the-dawn-of-ai" {...field} disabled={isEditMode} />
-                    </FormControl>
-                    <FormDescription>
-                        This is the URL-friendly version of the title. It cannot be changed later.
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
