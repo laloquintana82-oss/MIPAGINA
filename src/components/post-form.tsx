@@ -52,21 +52,20 @@ export default function PostForm({ post }: PostFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const isEditMode = !!post;
 
-  const defaultValues: Partial<PostFormValues> = {
+  const form = useForm<PostFormValues>({
+    resolver: zodResolver(postFormSchema),
+    defaultValues: {
       title: post?.title || '',
       excerpt: post?.excerpt || '',
       tags: post?.tags?.join(', ') || '',
       date: post?.date || new Date().toISOString().split('T')[0],
-  };
-
-  const form = useForm<PostFormValues>({
-    resolver: zodResolver(postFormSchema),
-    defaultValues,
+    },
     mode: "onChange",
   });
 
   const onSubmit = async (data: PostFormValues) => {
     setIsLoading(true);
+    let success = false;
     try {
         const slug = isEditMode && post.slug ? post.slug : generateSlug(data.title);
 
@@ -76,7 +75,7 @@ export default function PostForm({ post }: PostFormProps) {
             title: 'Error',
             description: 'Could not generate a valid slug from the title.',
           });
-          throw new Error("Could not generate a valid slug from the title.");
+          return;
         }
 
         const postData = {
@@ -100,8 +99,7 @@ export default function PostForm({ post }: PostFormProps) {
                 description: 'Your new blog post has been successfully created.',
             });
         }
-        router.push('/admin/posts');
-        router.refresh();
+        success = true;
     } catch (error: any) {
         console.error('Error saving post:', error);
         toast({
@@ -111,6 +109,9 @@ export default function PostForm({ post }: PostFormProps) {
         });
     } finally {
         setIsLoading(false);
+        if (success) {
+           router.push('/admin/posts');
+        }
     }
   };
 
