@@ -29,6 +29,8 @@ export function ArticleCard(post: Post) {
     day: "numeric",
   });
 
+  const plainTextExcerpt = excerpt.replace(/<[^>]*>?/gm, '');
+
   return (
     <Link href={`/blog/${slug}`} className="group relative block h-full">
       <Card className="flex h-full flex-col overflow-hidden rounded-lg border-2 border-transparent transition-all duration-300 ease-in-out group-hover:border-primary group-hover:shadow-2xl group-hover:-translate-y-2">
@@ -61,7 +63,7 @@ export function ArticleCard(post: Post) {
           </CardTitle>
         </CardHeader>
         <CardContent className="flex-grow">
-          <p className="text-muted-foreground line-clamp-3">{excerpt}</p>
+          <p className="text-muted-foreground line-clamp-3">{plainTextExcerpt}</p>
         </CardContent>
         <CardFooter className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap gap-2">
