@@ -27,10 +27,10 @@ export default async function PapersPage() {
     <div className="container mx-auto max-w-4xl px-4 py-12 sm:py-16 md:py-20">
       <section className="text-center">
         <h1 className="font-headline text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-          Research & Publications
+          Investigación y Publicaciones
         </h1>
         <p className="mt-4 text-lg text-muted-foreground text-balance">
-          A selection of my academic work and research papers.
+          Una selección de mi trabajo académico y artículos de investigación.
         </p>
       </section>
 

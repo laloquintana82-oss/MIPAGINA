@@ -58,11 +58,11 @@ export default function ManagePapersPage() {
       })) as Paper[];
       setPapers(papersData);
     } catch (error) {
-      console.error('Error fetching papers:', error);
+      console.error('Error al obtener publicaciones:', error);
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to fetch papers.',
+        description: 'No se pudieron obtener las publicaciones.',
       });
     } finally {
       setIsLoading(false);
@@ -81,17 +81,17 @@ export default function ManagePapersPage() {
     try {
       await deleteDoc(doc(db, 'papers', paperToDelete));
       toast({
-        title: 'Paper Deleted',
-        description: 'The publication has been successfully deleted.',
+        title: 'Publicación Eliminada',
+        description: 'La publicación ha sido eliminada exitosamente.',
       });
       setPaperToDelete(null);
       fetchPapers(); // Refresh papers list
     } catch (error) {
-      console.error('Error deleting paper:', error);
+      console.error('Error al eliminar la publicación:', error);
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to delete paper.',
+        description: 'No se pudo eliminar la publicación.',
       });
     } finally {
       setIsDeleting(false);
@@ -99,7 +99,7 @@ export default function ManagePapersPage() {
   };
   
   if (authLoading || isLoading) {
-     return <div className="container mx-auto px-4 py-12 text-center">Loading...</div>;
+     return <div className="container mx-auto px-4 py-12 text-center">Cargando...</div>;
   }
 
   if (!user) {
@@ -109,20 +109,20 @@ export default function ManagePapersPage() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12">
        <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Manage Papers</h1>
+        <h1 className="text-3xl font-bold">Gestionar Publicaciones</h1>
         <Button asChild>
           <Link href="/admin/papers/new">
-            <PlusCircle className="mr-2 h-4 w-4" /> Add New Paper
+            <PlusCircle className="mr-2 h-4 w-4" /> Añadir Nueva Publicación
           </Link>
         </Button>
       </div>
       <Table>
-        <TableCaption>A list of your academic papers.</TableCaption>
+        <TableCaption>Una lista de tus publicaciones académicas.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Title</TableHead>
-            <TableHead>Year</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>Título</TableHead>
+            <TableHead>Año</TableHead>
+            <TableHead className="text-right">Acciones</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -134,27 +134,27 @@ export default function ManagePapersPage() {
                  <Button variant="outline" size="icon" asChild>
                   <Link href={`/admin/papers/edit/${paper.id}`}>
                     <Edit />
-                    <span className="sr-only">Edit</span>
+                    <span className="sr-only">Editar</span>
                   </Link>
                 </Button>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive" size="icon" onClick={() => setPaperToDelete(paper.id)}>
                       <Trash2 />
-                      <span className="sr-only">Delete</span>
+                      <span className="sr-only">Eliminar</span>
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete the publication.
+                        Esta acción no se puede deshacer. Esto eliminará permanentemente la publicación.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel onClick={() => setPaperToDelete(null)}>Cancel</AlertDialogCancel>
+                      <AlertDialogCancel onClick={() => setPaperToDelete(null)}>Cancelar</AlertDialogCancel>
                       <AlertDialogAction onClick={handleDeletePaper} disabled={isDeleting}>
-                        {isDeleting ? 'Deleting...' : 'Delete'}
+                        {isDeleting ? 'Eliminando...' : 'Eliminar'}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>

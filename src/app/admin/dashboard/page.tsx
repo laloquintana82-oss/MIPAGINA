@@ -17,7 +17,7 @@ export default function AdminDashboardPage() {
   }, [user, loading, router]);
 
   if (loading) {
-    return <div className="container mx-auto px-4 py-12 text-center">Loading...</div>;
+    return <div className="container mx-auto px-4 py-12 text-center">Cargando...</div>;
   }
 
   if (!user) {
@@ -28,44 +28,44 @@ export default function AdminDashboardPage() {
     <div className="container mx-auto max-w-4xl px-4 py-12 sm:py-16 md:py-20">
       <section className="text-center">
         <h1 className="font-headline text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-          Admin Dashboard
+          Panel de Administración
         </h1>
         <p className="mt-4 text-lg text-muted-foreground text-balance">
-          Welcome, {user.email}. Manage your blog content here.
+          Bienvenido, {user.email}. Gestiona el contenido de tu blog aquí.
         </p>
       </section>
 
       <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Manage Posts</CardTitle>
-            <CardDescription>Create, edit, and delete blog articles.</CardDescription>
+            <CardTitle>Gestionar Entradas</CardTitle>
+            <CardDescription>Crea, edita y elimina artículos del blog.</CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild>
-                <Link href="/admin/posts">Manage Posts</Link>
+                <Link href="/admin/posts">Gestionar Entradas</Link>
             </Button>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Manage Papers</CardTitle>
-            <CardDescription>Update your academic publications.</CardDescription>
+            <CardTitle>Gestionar Publicaciones</CardTitle>
+            <CardDescription>Actualiza tus publicaciones académicas.</CardDescription>
           </CardHeader>
           <CardContent>
              <Button asChild>
-                <Link href="/admin/papers">Manage Papers</Link>
+                <Link href="/admin/papers">Gestionar Publicaciones</Link>
              </Button>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Site Settings</CardTitle>
-            <CardDescription>Update your profile and site-wide settings.</CardDescription>
+            <CardTitle>Ajustes del Sitio</CardTitle>
+            <CardDescription>Actualiza tu perfil y la configuración general del sitio.</CardDescription>
           </CardHeader>
           <CardContent>
              <Button asChild>
-                <Link href="/admin/settings">Edit Settings</Link>
+                <Link href="/admin/settings">Editar Ajustes</Link>
              </Button>
           </CardContent>
         </Card>

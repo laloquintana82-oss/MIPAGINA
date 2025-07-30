@@ -24,14 +24,14 @@ import { useAuth } from "@/context/auth-context";
 import { useRouter } from "next/navigation";
 
 const settingsFormSchema = z.object({
-  intro: z.string().min(1, "Intro is required."),
-  paragraph1: z.string().min(1, "This paragraph is required."),
-  paragraph2: z.string().min(1, "This paragraph is required."),
-  paragraph3: z.string().min(1, "This paragraph is required."),
-  imageUrl: z.string().url("Please enter a valid URL."),
-  linkedinUrl: z.string().url("Please enter a valid URL."),
-  orcidUrl: z.string().url("Please enter a valid URL."),
-  email: z.string().email("Please enter a valid email."),
+  intro: z.string().min(1, "La introducción es obligatoria."),
+  paragraph1: z.string().min(1, "Este párrafo es obligatorio."),
+  paragraph2: z.string().min(1, "Este párrafo es obligatorio."),
+  paragraph3: z.string().min(1, "Este párrafo es obligatorio."),
+  imageUrl: z.string().url("Por favor, introduce una URL válida."),
+  linkedinUrl: z.string().url("Por favor, introduce una URL válida."),
+  orcidUrl: z.string().url("Por favor, introduce una URL válida."),
+  email: z.string().email("Por favor, introduce un correo electrónico válido."),
 });
 
 type SettingsFormValues = z.infer<typeof settingsFormSchema>;
@@ -79,15 +79,15 @@ export default function SettingsPage() {
       const docRef = doc(db, "content", "about");
       await setDoc(docRef, data, { merge: true });
       toast({
-        title: "Settings Saved",
-        description: "Your 'About Me' page has been updated.",
+        title: "Ajustes Guardados",
+        description: "Tu página 'Sobre Mí' ha sido actualizada.",
       });
     } catch (error) {
-      console.error("Error saving settings: ", error);
+      console.error("Error al guardar los ajustes: ", error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to save settings.",
+        description: "No se pudieron guardar los ajustes.",
       });
     } finally {
       setIsLoading(false);
@@ -95,16 +95,16 @@ export default function SettingsPage() {
   };
 
   if (loading || !user) {
-    return <div className="container mx-auto px-4 py-12 text-center">Loading...</div>;
+    return <div className="container mx-auto px-4 py-12 text-center">Cargando...</div>;
   }
 
   return (
     <div className="container mx-auto max-w-2xl px-4 py-12 sm:py-16">
       <Card>
         <CardHeader>
-          <CardTitle>Site Settings</CardTitle>
+          <CardTitle>Ajustes del Sitio</CardTitle>
           <CardDescription>
-            Update the content for your &quot;About Me&quot; page here.
+            Actualiza el contenido de tu página &quot;Sobre Mí&quot; aquí.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -115,12 +115,12 @@ export default function SettingsPage() {
                 name="intro"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Intro Text</FormLabel>
+                    <FormLabel>Texto de Introducción</FormLabel>
                     <FormControl>
-                      <Input placeholder="Researcher, writer, and lifelong learner." {...field} />
+                      <Input placeholder="Investigador, escritor y aprendiz permanente." {...field} />
                     </FormControl>
                     <FormDescription>
-                      A short introduction shown below the main title.
+                      Una breve introducción que se muestra debajo del título principal.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -131,12 +131,12 @@ export default function SettingsPage() {
                 name="imageUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Profile Image URL</FormLabel>
+                    <FormLabel>URL de la Imagen de Perfil</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://your-image-url.com/profile.png" {...field} />
+                      <Input placeholder="https://tu-imagen.com/perfil.png" {...field} />
                     </FormControl>
                      <FormDescription>
-                      The URL for your portrait image. You can upload an image to a service like Imgur.
+                      La URL de tu imagen de retrato. Puedes subir una imagen a un servicio como Imgur.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -147,9 +147,9 @@ export default function SettingsPage() {
                 name="paragraph1"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Paragraph</FormLabel>
+                    <FormLabel>Primer Párrafo</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Tell us a little bit about yourself..." {...field} />
+                      <Textarea placeholder="Cuéntanos un poco sobre ti..." {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -160,9 +160,9 @@ export default function SettingsPage() {
                 name="paragraph2"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Second Paragraph</FormLabel>
+                    <FormLabel>Segundo Párrafo</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Continue your story..." {...field} />
+                      <Textarea placeholder="Continúa tu historia..." {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -173,9 +173,9 @@ export default function SettingsPage() {
                 name="paragraph3"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Third Paragraph</FormLabel>
+                    <FormLabel>Tercer Párrafo</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Conclude your bio..." {...field} />
+                      <Textarea placeholder="Concluye tu biografía..." {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -186,9 +186,9 @@ export default function SettingsPage() {
                 name="linkedinUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>LinkedIn URL</FormLabel>
+                    <FormLabel>URL de LinkedIn</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://linkedin.com/in/your-profile" {...field} />
+                      <Input placeholder="https://linkedin.com/in/tu-perfil" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -199,9 +199,9 @@ export default function SettingsPage() {
                 name="orcidUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>ORCID URL</FormLabel>
+                    <FormLabel>URL de ORCID</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://orcid.org/your-id" {...field} />
+                      <Input placeholder="https://orcid.org/tu-id" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -212,16 +212,16 @@ export default function SettingsPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email Address</FormLabel>
+                    <FormLabel>Dirección de Correo Electrónico</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="your.email@example.com" {...field} />
+                      <Input type="email" placeholder="tu.email@example.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? 'Saving...' : 'Save Changes'}
+                {isLoading ? 'Guardando...' : 'Guardar Cambios'}
               </Button>
             </form>
           </Form>

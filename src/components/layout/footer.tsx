@@ -7,7 +7,7 @@ export function Footer() {
     <footer className="border-t">
       <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 py-8 sm:flex-row">
         <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} El Blog de Luis Eduardo. All rights reserved.
+          © {new Date().getFullYear()} El Blog de Luis Eduardo. Todos los derechos reservados.
         </p>
         <div className="flex items-center space-x-2">
           <Button variant="ghost" size="icon" asChild>
@@ -21,7 +21,7 @@ export function Footer() {
             </Link>
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <Link href="#" aria-label="RSS Feed">
+            <Link href="#" aria-label="Fuente RSS">
               <Rss className="h-4 w-4" />
             </Link>
           </Button>

@@ -27,14 +27,14 @@ async function getAboutContent(): Promise<AboutContent | null> {
             console.log("No such document!");
             // Return a default structure or handle it as an error
             return {
-                intro: "Researcher, writer, and lifelong learner.",
-                paragraph1: "I am a passionate researcher and writer with a deep interest in the intersection of technology, philosophy, and human potential. My academic journey has led me through the fascinating worlds of artificial intelligence and cognitive science, where I explore the nature of intelligence, both artificial and natural.",
-                paragraph2: "Beyond my research, I find solace and expression in writing. This blog is my canvas for sharing ideas, exploring complex topics, and engaging in thoughtful discourse. Whether I'm dissecting a new scientific discovery, reflecting on an ancient philosophical text, or simply sharing personal insights, my goal is to spark curiosity and foster a deeper understanding of our world.",
-                paragraph3: "Thank you for joining me on this journey of discovery.",
+                intro: "Investigador, escritor y aprendiz permanente.",
+                paragraph1: "Soy un apasionado investigador y escritor con un profundo interés en la intersección de la tecnología, la filosofía y el potencial humano. Mi viaje académico me ha llevado a través de los fascinantes mundos de la inteligencia artificial y la ciencia cognitiva, donde exploro la naturaleza de la inteligencia, tanto artificial como natural.",
+                paragraph2: "Más allá de mi investigación, encuentro consuelo y expresión en la escritura. Este blog es mi lienzo para compartir ideas, explorar temas complejos y participar en un discurso reflexivo. Ya sea que esté analizando un nuevo descubrimiento científico, reflexionando sobre un antiguo texto filosófico o simplemente compartiendo ideas personales, mi objetivo es despertar la curiosidad y fomentar una comprensión más profunda de nuestro mundo.",
+                paragraph3: "Gracias por acompañarme en este viaje de descubrimiento.",
                 imageUrl: "https://placehold.co/400x400.png",
                 linkedinUrl: "#",
                 orcidUrl: "#",
-                email: "hello@example.com"
+                email: "hola@example.com"
             };
         }
     } catch (error) {
@@ -48,14 +48,14 @@ export default async function AboutPage() {
   const content = await getAboutContent();
 
   if (!content) {
-    return <div>Error loading content. Please try again later.</div>;
+    return <div>Error al cargar el contenido. Por favor, inténtalo de nuevo más tarde.</div>;
   }
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12 sm:py-16 md:py-20">
       <section className="text-center">
         <h1 className="font-headline text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-          About Me
+          Sobre Mí
         </h1>
         <p className="mt-4 text-lg text-muted-foreground text-balance">
           {content.intro}
@@ -66,7 +66,7 @@ export default async function AboutPage() {
         <div className="flex justify-center md:col-span-1">
           <Image
             src={content.imageUrl || "https://placehold.co/400x400.png"}
-            alt="Portrait of the author"
+            alt="Retrato del autor"
             data-ai-hint="portrait author"
             width={250}
             height={250}
@@ -97,7 +97,7 @@ export default async function AboutPage() {
             </Button>
              <Button variant="secondary" asChild>
               <Link href={`mailto:${content.email}`}>
-                <Mail className="mr-2 h-4 w-4" /> Email
+                <Mail className="mr-2 h-4 w-4" /> Correo
               </Link>
             </Button>
           </div>

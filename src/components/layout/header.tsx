@@ -8,11 +8,10 @@ import { useAuth } from "@/context/auth-context";
 import { Button } from "../ui/button";
 
 const navLinks = [
-  { href: "/", label: "Home" },
+  { href: "/", label: "Inicio" },
   { href: "/blog", label: "Blog" },
-  { href: "/papers", label: "Papers" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "/papers", label: "Publicaciones" },
+  { href: "/about", label: "Sobre mí" },
 ];
 
 export function Header() {
@@ -45,16 +44,16 @@ export function Header() {
               href="/admin/dashboard"
               className={cn(
                 "transition-colors hover:text-foreground/80",
-                pathname === "/admin/dashboard" ? "text-foreground" : "text-foreground/60"
+                pathname.startsWith("/admin") ? "text-foreground" : "text-foreground/60"
               )}
             >
-              Dashboard
+              Panel
             </Link>
           )}
         </nav>
         <div className="flex items-center space-x-2">
            <ThemeToggle />
-           {user && <Button onClick={signOut} variant="outline" size="sm">Sign Out</Button>}
+           {user && <Button onClick={signOut} variant="outline" size="sm">Cerrar Sesión</Button>}
         </div>
       </div>
     </header>

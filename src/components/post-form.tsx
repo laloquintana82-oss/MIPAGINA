@@ -24,10 +24,10 @@ import { useRouter } from 'next/navigation';
 import { Post } from './article-card';
 
 const postFormSchema = z.object({
-  title: z.string().min(1, 'Title is required.'),
-  excerpt: z.string().min(1, 'Excerpt is required.'),
-  tags: z.string().min(1, 'Tags are required.'),
-  date: z.string().min(1, 'Date is required.'),
+  title: z.string().min(1, 'El título es obligatorio.'),
+  excerpt: z.string().min(1, 'El extracto es obligatorio.'),
+  tags: z.string().min(1, 'Las etiquetas son obligatorias.'),
+  date: z.string().min(1, 'La fecha es obligatoria.'),
 });
 
 type PostFormValues = z.infer<typeof postFormSchema>;
@@ -41,6 +41,8 @@ const generateSlug = (title: string) => {
     return title
         .toString()
         .toLowerCase()
+        .normalize('NFD') // Normaliza los caracteres a su forma base (ej. 'á' -> 'a')
+        .replace(/[\u0300-\u036f]/g, '')
         .replace(/[^a-z0-9\s-]/g, '') 
         .replace(/\s+/g, '-')           
         .replace(/-+/g, '-');
@@ -65,7 +67,9 @@ export default function PostForm({ post }: PostFormProps) {
   });
 
   const onSubmit = async (data: PostFormValues) => {
+    if (isLoading) return;
     setIsLoading(true);
+
     try {
         const slug = (isEditMode && post.slug) ? post.slug : generateSlug(data.title);
 
@@ -73,9 +77,9 @@ export default function PostForm({ post }: PostFormProps) {
           toast({
             variant: 'destructive',
             title: 'Error',
-            description: 'Could not generate a valid slug from the title. Please provide a title.',
+            description: 'No se pudo generar un slug. Por favor, introduce un título válido.',
           });
-          setIsLoading(false); // Reset loading state
+          setIsLoading(false);
           return;
         }
 
@@ -87,31 +91,23 @@ export default function PostForm({ post }: PostFormProps) {
         };
 
         const docRef = doc(db, 'posts', slug);
-        if (isEditMode) {
-            await setDoc(docRef, postData, { merge: true });
-            toast({
-                title: 'Post Updated',
-                description: 'Your blog post has been successfully updated.',
-            });
-        } else {
-            await setDoc(docRef, postData);
-            toast({
-                title: 'Post Created',
-                description: 'Your new blog post has been successfully created.',
-            });
-        }
+        await setDoc(docRef, postData, { merge: isEditMode });
         
-        // This will only be reached on success
+        toast({
+            title: isEditMode ? 'Entrada Actualizada' : 'Entrada Creada',
+            description: `La entrada del blog ha sido ${isEditMode ? 'actualizada' : 'creada'} exitosamente.`,
+        });
+        
         router.push('/admin/posts');
 
     } catch (error: any) {
-        console.error('Error saving post:', error);
+        console.error('Error al guardar la entrada:', error);
         toast({
             variant: 'destructive',
             title: 'Error',
-            description: error.message || 'Failed to save post.',
+            description: error.message || 'No se pudo guardar la entrada.',
         });
-        setIsLoading(false); // Reset loading state on error
+        setIsLoading(false);
     }
   };
 
@@ -119,7 +115,7 @@ export default function PostForm({ post }: PostFormProps) {
     <div className="container mx-auto max-w-2xl px-4 py-12 sm:py-16">
       <Card>
         <CardHeader>
-          <CardTitle>{isEditMode ? 'Edit Post' : 'Create New Post'}</CardTitle>
+          <CardTitle>{isEditMode ? 'Editar Entrada' : 'Crear Nueva Entrada'}</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -129,9 +125,9 @@ export default function PostForm({ post }: PostFormProps) {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel>Título</FormLabel>
                     <FormControl>
-                      <Input placeholder="The Dawn of AI" {...field} />
+                      <Input placeholder="El Amanecer de la IA" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -142,7 +138,7 @@ export default function PostForm({ post }: PostFormProps) {
                 name="date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>Fecha</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -155,10 +151,10 @@ export default function PostForm({ post }: PostFormProps) {
                 name="excerpt"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Excerpt</FormLabel>
+                    <FormLabel>Extracto</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="A short summary of the post..."
+                        placeholder="Un breve resumen de la entrada..."
                         {...field}
                       />
                     </FormControl>
@@ -171,19 +167,19 @@ export default function PostForm({ post }: PostFormProps) {
                 name="tags"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tags</FormLabel>
+                    <FormLabel>Etiquetas</FormLabel>
                     <FormControl>
-                      <Input placeholder="AI, Technology, Future" {...field} />
+                      <Input placeholder="IA, Tecnología, Futuro" {...field} />
                     </FormControl>
                     <FormDescription>
-                      Comma-separated tags.
+                      Etiquetas separadas por comas.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? (isEditMode ? 'Saving...' : 'Creating...') : (isEditMode ? 'Save Changes' : 'Create Post')}
+                {isLoading ? (isEditMode ? 'Guardando...' : 'Creando...') : (isEditMode ? 'Guardar Cambios' : 'Crear Entrada')}
               </Button>
             </form>
           </Form>

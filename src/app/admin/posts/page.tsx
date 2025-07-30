@@ -58,11 +58,11 @@ export default function ManagePostsPage() {
       })) as Post[];
       setPosts(postsData);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      console.error('Error al obtener las entradas:', error);
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to fetch posts.',
+        description: 'No se pudieron obtener las entradas.',
       });
     } finally {
       setIsLoading(false);
@@ -81,17 +81,17 @@ export default function ManagePostsPage() {
     try {
       await deleteDoc(doc(db, 'posts', postToDelete));
       toast({
-        title: 'Post Deleted',
-        description: 'The blog post has been successfully deleted.',
+        title: 'Entrada Eliminada',
+        description: 'La entrada del blog ha sido eliminada exitosamente.',
       });
       setPostToDelete(null);
       fetchPosts(); // Refresh posts list
     } catch (error) {
-      console.error('Error deleting post:', error);
+      console.error('Error al eliminar la entrada:', error);
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to delete post.',
+        description: 'No se pudo eliminar la entrada.',
       });
     } finally {
       setIsDeleting(false);
@@ -99,7 +99,7 @@ export default function ManagePostsPage() {
   };
   
   if (authLoading || isLoading) {
-     return <div className="container mx-auto px-4 py-12 text-center">Loading...</div>;
+     return <div className="container mx-auto px-4 py-12 text-center">Cargando...</div>;
   }
 
   if (!user) {
@@ -109,20 +109,20 @@ export default function ManagePostsPage() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12">
        <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Manage Posts</h1>
+        <h1 className="text-3xl font-bold">Gestionar Entradas</h1>
         <Button asChild>
           <Link href="/admin/posts/new">
-            <PlusCircle className="mr-2 h-4 w-4" /> Add New Post
+            <PlusCircle className="mr-2 h-4 w-4" /> Añadir Nueva Entrada
           </Link>
         </Button>
       </div>
       <Table>
-        <TableCaption>A list of your blog posts.</TableCaption>
+        <TableCaption>Una lista de las entradas de tu blog.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Title</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>Título</TableHead>
+            <TableHead>Fecha</TableHead>
+            <TableHead className="text-right">Acciones</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -134,27 +134,27 @@ export default function ManagePostsPage() {
                  <Button variant="outline" size="icon" asChild>
                   <Link href={`/admin/posts/edit/${post.slug}`}>
                     <Edit />
-                    <span className="sr-only">Edit</span>
+                    <span className="sr-only">Editar</span>
                   </Link>
                 </Button>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive" size="icon" onClick={() => setPostToDelete(post.slug)}>
                       <Trash2 />
-                      <span className="sr-only">Delete</span>
+                      <span className="sr-only">Eliminar</span>
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete the post.
+                        Esta acción no se puede deshacer. Esto eliminará permanentemente la entrada.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel onClick={() => setPostToDelete(null)}>Cancel</AlertDialogCancel>
+                      <AlertDialogCancel onClick={() => setPostToDelete(null)}>Cancelar</AlertDialogCancel>
                       <AlertDialogAction onClick={handleDeletePost} disabled={isDeleting}>
-                        {isDeleting ? 'Deleting...' : 'Delete'}
+                        {isDeleting ? 'Eliminando...' : 'Eliminar'}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>

@@ -19,7 +19,7 @@ export type Post = {
 export function ArticleCard(post: Post) {
   const { slug, title, date, excerpt, tags } = post;
   
-  const formattedDate = new Date(date).toLocaleDateString("en-US", {
+  const formattedDate = new Date(date).toLocaleDateString("es-ES", {
     year: "numeric",
     month: "long",
     day: "numeric",

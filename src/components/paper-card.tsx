@@ -38,7 +38,7 @@ export function PaperCard({ title, authors, abstract, link, year }: Paper) {
       <CardFooter>
         <Button asChild variant="outline">
           <Link href={link} target="_blank" rel="noopener noreferrer">
-            Read Paper <ArrowRight className="ml-2 h-4 w-4" />
+            Leer Publicación <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
       </CardFooter>

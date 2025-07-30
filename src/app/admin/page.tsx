@@ -21,13 +21,13 @@ export default function AdminLoginPage() {
     setIsLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      toast({ title: "Login Successful", description: "Welcome back!" });
+      toast({ title: "Inicio de Sesión Exitoso", description: "¡Bienvenido de nuevo!" });
       router.push('/admin/dashboard');
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Login Failed",
-        description: error.message,
+        title: "Fallo de Inicio de Sesión",
+        description: "Credenciales incorrectas. Por favor, inténtalo de nuevo.",
       });
     } finally {
       setIsLoading(false);
@@ -38,13 +38,13 @@ export default function AdminLoginPage() {
     <div className="container mx-auto flex h-screen items-center justify-center px-4">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Admin Login</CardTitle>
-          <CardDescription>Enter your credentials to access the dashboard.</CardDescription>
+          <CardTitle>Acceso de Administrador</CardTitle>
+          <CardDescription>Introduce tus credenciales para acceder al panel.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignIn} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Correo Electrónico</Label>
               <Input
                 id="email"
                 type="email"
@@ -55,7 +55,7 @@ export default function AdminLoginPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Contraseña</Label>
               <Input
                 id="password"
                 type="password"
@@ -65,7 +65,7 @@ export default function AdminLoginPage() {
               />
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? 'Signing In...' : 'Sign In'}
+              {isLoading ? 'Iniciando Sesión...' : 'Iniciar Sesión'}
             </Button>
           </form>
         </CardContent>

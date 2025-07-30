@@ -30,7 +30,7 @@ export default async function Home() {
           El Blog de Luis Eduardo
         </h1>
         <p className="mt-6 text-lg leading-8 text-muted-foreground text-balance">
-          A personal space where I publish articles, essays, and my academic research. Welcome to my corner of the internet.
+          Un espacio personal donde publico artículos, ensayos y mis investigaciones académicas. Bienvenido a mi rincón de internet.
         </p>
       </section>
 
@@ -38,7 +38,7 @@ export default async function Home() {
 
       <section>
         <h2 className="mb-8 text-center font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          Recent Posts
+          Entradas Recientes
         </h2>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {recentPosts.map((post) => (

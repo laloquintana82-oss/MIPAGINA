@@ -24,11 +24,11 @@ import { useRouter } from 'next/navigation';
 import { Paper } from './paper-card';
 
 const paperFormSchema = z.object({
-  title: z.string().min(1, 'Title is required.'),
-  authors: z.string().min(1, 'Authors are required.'),
-  year: z.string().min(4, 'Year is required.'),
-  link: z.string().url('A valid URL is required.'),
-  abstract: z.string().min(1, 'Abstract is required.'),
+  title: z.string().min(1, 'El título es obligatorio.'),
+  authors: z.string().min(1, 'Los autores son obligatorios.'),
+  year: z.string().min(4, 'El año es obligatorio.'),
+  link: z.string().url('Se requiere una URL válida.'),
+  abstract: z.string().min(1, 'El resumen es obligatorio.'),
 });
 
 type PaperFormValues = z.infer<typeof paperFormSchema>;
@@ -67,14 +67,14 @@ export default function PaperForm({ paper }: PaperFormProps) {
             const docRef = doc(db, 'papers', paper.id);
             await setDoc(docRef, paperData, { merge: true });
             toast({
-                title: 'Paper Updated',
-                description: 'Your publication has been successfully updated.',
+                title: 'Publicación Actualizada',
+                description: 'Tu publicación ha sido actualizada exitosamente.',
             });
         } else {
             await addDoc(collection(db, 'papers'), paperData);
             toast({
-                title: 'Paper Created',
-                description: 'Your new publication has been successfully created.',
+                title: 'Publicación Creada',
+                description: 'Tu nueva publicación ha sido creada exitosamente.',
             });
         }
         
@@ -82,11 +82,11 @@ export default function PaperForm({ paper }: PaperFormProps) {
         router.refresh();
 
     } catch (error: any) {
-        console.error('Error saving paper:', error);
+        console.error('Error al guardar la publicación:', error);
         toast({
             variant: 'destructive',
             title: 'Error',
-            description: error.message || 'Failed to save paper.',
+            description: error.message || 'No se pudo guardar la publicación.',
         });
     } finally {
       setIsLoading(false);
@@ -97,7 +97,7 @@ export default function PaperForm({ paper }: PaperFormProps) {
     <div className="container mx-auto max-w-2xl px-4 py-12 sm:py-16">
       <Card>
         <CardHeader>
-          <CardTitle>{isEditMode ? 'Edit Paper' : 'Create New Paper'}</CardTitle>
+          <CardTitle>{isEditMode ? 'Editar Publicación' : 'Crear Nueva Publicación'}</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -107,9 +107,9 @@ export default function PaperForm({ paper }: PaperFormProps) {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel>Título</FormLabel>
                     <FormControl>
-                      <Input placeholder="Quantum Entanglement and its Implications" {...field} />
+                      <Input placeholder="El Entrelazamiento Cuántico y sus Implicaciones" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -120,12 +120,12 @@ export default function PaperForm({ paper }: PaperFormProps) {
                 name="authors"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Authors</FormLabel>
+                    <FormLabel>Autores</FormLabel>
                     <FormControl>
-                      <Input placeholder="A. Author, B. Coauthor" {...field} />
+                      <Input placeholder="A. Autor, B. Coautor" {...field} />
                     </FormControl>
                     <FormDescription>
-                      Comma-separated authors.
+                      Autores separados por comas.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -136,7 +136,7 @@ export default function PaperForm({ paper }: PaperFormProps) {
                 name="year"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Year</FormLabel>
+                    <FormLabel>Año</FormLabel>
                     <FormControl>
                       <Input type="text" placeholder="2023" {...field} />
                     </FormControl>
@@ -149,12 +149,12 @@ export default function PaperForm({ paper }: PaperFormProps) {
                 name="link"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Link</FormLabel>
+                    <FormLabel>Enlace</FormLabel>
                     <FormControl>
                       <Input type="url" placeholder="https://example.com/paper.pdf" {...field} />
                     </FormControl>
                      <FormDescription>
-                      A link to the paper (e.g., PDF, arXiv, journal page).
+                      Un enlace a la publicación (ej. PDF, arXiv, página de la revista).
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -165,10 +165,10 @@ export default function PaperForm({ paper }: PaperFormProps) {
                 name="abstract"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Abstract</FormLabel>
+                    <FormLabel>Resumen</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="A short summary of the paper..."
+                        placeholder="Un breve resumen de la publicación..."
                         {...field}
                       />
                     </FormControl>
@@ -177,7 +177,7 @@ export default function PaperForm({ paper }: PaperFormProps) {
                 )}
               />
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? (isEditMode ? 'Saving...' : 'Creating...') : (isEditMode ? 'Save Changes' : 'Create Paper')}
+                {isLoading ? (isEditMode ? 'Guardando...' : 'Creando...') : (isEditMode ? 'Guardar Cambios' : 'Crear Publicación')}
               </Button>
             </form>
           </Form>
