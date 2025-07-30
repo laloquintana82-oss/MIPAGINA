@@ -38,10 +38,11 @@ interface PostFormProps {
 
 const generateSlug = (title: string) => {
     return title
+        .toString()
         .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '') // remove special chars
-        .replace(/\s+/g, '-')           // replace spaces with hyphens
-        .replace(/-+/g, '-');            // remove consecutive hyphens
+        .replace(/[^a-z0-9\s-]/g, '') 
+        .replace(/\s+/g, '-')           
+        .replace(/-+/g, '-');
 };
 
 
@@ -67,7 +68,11 @@ export default function PostForm({ post }: PostFormProps) {
   const onSubmit = async (data: PostFormValues) => {
     setIsLoading(true);
     try {
-        const slug = isEditMode ? post.slug : generateSlug(data.title);
+        const slug = isEditMode && post.slug ? post.slug : generateSlug(data.title);
+
+        if (!slug) {
+          throw new Error("Could not generate a valid slug from the title.");
+        }
 
         const postData = {
             title: data.title,
@@ -91,6 +96,7 @@ export default function PostForm({ post }: PostFormProps) {
             });
         }
         router.push('/admin/posts');
+        router.refresh();
     } catch (error: any) {
         console.error('Error saving post:', error);
         toast({
