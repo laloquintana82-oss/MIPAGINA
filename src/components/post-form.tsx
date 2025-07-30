@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import RichTextEditor from '@/components/rich-text-editor';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
@@ -281,10 +281,9 @@ export default function PostForm({ post }: PostFormProps) {
                   <FormItem>
                     <FormLabel>Contenido</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Escribe aquí el contenido de tu post..."
-                        {...field}
-                        rows={10}
+                       <RichTextEditor
+                        value={field.value}
+                        onChange={field.onChange}
                       />
                     </FormControl>
                     <FormDescription>

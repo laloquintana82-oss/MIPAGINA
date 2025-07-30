@@ -78,7 +78,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
             )}
             
             <div 
-                className="prose prose-lg mx-auto max-w-3xl text-foreground dark:prose-invert prose-p:text-justify prose-headings:text-foreground prose-a:text-primary hover:prose-a:text-primary/80"
+                className="prose prose-lg dark:prose-invert mx-auto max-w-3xl prose-headings:text-foreground prose-p:text-foreground prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-foreground"
                 dangerouslySetInnerHTML={{ __html: post.excerpt }}
             />
         </article>
