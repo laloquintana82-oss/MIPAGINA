@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { collection, deleteDoc, doc, getDocs, orderBy, query } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc, writeBatch } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import {
@@ -29,7 +29,8 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import { Post } from '@/components/article-card';
-import { PlusCircle, Trash2, Edit } from 'lucide-react';
+import { PlusCircle, Trash2, Edit, Star } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
 
 export default function ManagePostsPage() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -40,11 +41,7 @@ export default function ManagePostsPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.push('/admin');
-    }
-  }, [user, authLoading, router]);
+  const featuredPostsCount = posts.filter(p => p.featured).length;
 
   const fetchPosts = async () => {
     setIsLoading(true);
@@ -70,10 +67,13 @@ export default function ManagePostsPage() {
   };
 
   useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/admin');
+    }
     if (user) {
       fetchPosts();
     }
-  }, [user]);
+  }, [user, authLoading, router]);
 
   const handleDeletePost = async () => {
     if (!postToDelete) return;
@@ -97,9 +97,38 @@ export default function ManagePostsPage() {
       setIsDeleting(false);
     }
   };
-  
+
+  const handleFeatureToggle = async (slug: string, currentStatus: boolean) => {
+    if (!currentStatus && featuredPostsCount >= 2) {
+      toast({
+        variant: 'destructive',
+        title: 'Límite Alcanzado',
+        description: 'Solo puedes destacar un máximo de 2 entradas.',
+      });
+      return;
+    }
+
+    const postRef = doc(db, 'posts', slug);
+    try {
+      await updateDoc(postRef, { featured: !currentStatus });
+      // Optimistic update
+      setPosts(posts.map(p => p.slug === slug ? { ...p, featured: !currentStatus } : p));
+      toast({
+        title: 'Éxito',
+        description: `La entrada ha sido ${!currentStatus ? 'destacada' : 'quitada de destacados'}.`,
+      });
+    } catch (error) {
+      console.error('Error al actualizar la entrada:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'No se pudo actualizar la entrada.',
+      });
+    }
+  };
+
   if (authLoading || isLoading) {
-     return <div className="container mx-auto px-4 py-12 text-center">Cargando...</div>;
+    return <div className="container mx-auto px-4 py-12 text-center">Cargando...</div>;
   }
 
   if (!user) {
@@ -108,7 +137,7 @@ export default function ManagePostsPage() {
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12">
-       <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Gestionar Entradas</h1>
         <Button asChild>
           <Link href="/admin/posts/new">
@@ -117,11 +146,12 @@ export default function ManagePostsPage() {
         </Button>
       </div>
       <Table>
-        <TableCaption>Una lista de las entradas de tu blog.</TableCaption>
+        <TableCaption>Una lista de las entradas de tu blog. Puedes destacar hasta 2 en la página de inicio.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Título</TableHead>
             <TableHead>Fecha</TableHead>
+            <TableHead>Destacado</TableHead>
             <TableHead className="text-right">Acciones</TableHead>
           </TableRow>
         </TableHeader>
@@ -130,8 +160,16 @@ export default function ManagePostsPage() {
             <TableRow key={post.slug}>
               <TableCell className="font-medium">{post.title}</TableCell>
               <TableCell>{new Date(post.date).toLocaleDateString()}</TableCell>
+              <TableCell>
+                <Switch
+                  checked={post.featured || false}
+                  onCheckedChange={() => handleFeatureToggle(post.slug, post.featured || false)}
+                  disabled={!post.featured && featuredPostsCount >= 2}
+                  aria-label="Destacar entrada"
+                />
+              </TableCell>
               <TableCell className="text-right space-x-2">
-                 <Button variant="outline" size="icon" asChild>
+                <Button variant="outline" size="icon" asChild>
                   <Link href={`/admin/posts/edit/${post.slug}`}>
                     <Edit />
                     <span className="sr-only">Editar</span>

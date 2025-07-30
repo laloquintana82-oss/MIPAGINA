@@ -1,17 +1,17 @@
 import { ArticleCard, type Post } from "@/components/article-card";
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
 
-async function getRecentPosts(): Promise<Post[]> {
+async function getFeaturedPosts(): Promise<Post[]> {
     try {
         const postsCollection = collection(db, 'posts');
-        const q = query(postsCollection, orderBy('date', 'desc'), limit(2));
+        const q = query(postsCollection, where('featured', '==', true), limit(2));
         const querySnapshot = await getDocs(q);
         const posts = querySnapshot.docs.map(doc => ({
             slug: doc.id,
@@ -19,13 +19,13 @@ async function getRecentPosts(): Promise<Post[]> {
         } as Post));
         return posts;
     } catch (error) {
-        console.error("Error fetching recent posts: ", error);
+        console.error("Error fetching featured posts: ", error);
         return [];
     }
 }
 
 export default async function Home() {
-  const recentPosts = await getRecentPosts();
+  const featuredPosts = await getFeaturedPosts();
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12 sm:py-16 md:py-20">
@@ -45,13 +45,17 @@ export default async function Home() {
 
       <section>
         <h2 className="mb-8 text-center font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          Entradas Recientes
+          Entradas Destacadas
         </h2>
-        <div className="grid grid-cols-1 gap-12">
-          {recentPosts.map((post) => (
-            <ArticleCard key={post.slug} {...post} />
-          ))}
-        </div>
+        {featuredPosts.length > 0 ? (
+          <div className="grid grid-cols-1 gap-12">
+            {featuredPosts.map((post) => (
+              <ArticleCard key={post.slug} {...post} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-muted-foreground">No hay entradas destacadas en este momento. Vuelve a consultar más tarde.</p>
+        )}
         <div className="mt-12 text-center">
           <Button asChild>
             <Link href="/blog">

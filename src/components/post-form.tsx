@@ -17,13 +17,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { doc, setDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { db, storage } from '@/lib/firebase';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Post } from './article-card';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import Image from 'next/image';
+import { Switch } from './ui/switch';
 
 const postFormSchema = z.object({
   title: z.string().min(1, 'El título es obligatorio.'),
@@ -31,6 +32,7 @@ const postFormSchema = z.object({
   tags: z.string().min(1, 'Las etiquetas son obligatorias.'),
   date: z.string().min(1, 'La fecha es obligatoria.'),
   imageUrl: z.string().url('Por favor, introduce una URL válida.').optional().or(z.literal('')),
+  featured: z.boolean().default(false).optional(),
 });
 
 type PostFormValues = z.infer<typeof postFormSchema>;
@@ -70,6 +72,7 @@ export default function PostForm({ post }: PostFormProps) {
       tags: post?.tags?.join(', ') || '',
       date: post?.date || new Date().toISOString().split('T')[0],
       imageUrl: post?.imageUrl || '',
+      featured: post?.featured || false,
     },
     mode: "onChange",
   });
@@ -96,6 +99,23 @@ export default function PostForm({ post }: PostFormProps) {
 
   const onSubmit = async (data: PostFormValues) => {
     if (isLoading || isUploading) return;
+    
+    // Check featured limit before submitting
+    if (data.featured && !isEditMode) {
+      const postsCollection = collection(db, 'posts');
+      const q = query(postsCollection, where('featured', '==', true));
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.size >= 2) {
+          toast({
+              variant: 'destructive',
+              title: 'Límite de Destacados Alcanzado',
+              description: 'Solo puedes tener 2 entradas destacadas. Por favor, desmarca una antes de destacar esta.',
+          });
+          return;
+      }
+    }
+
+
     setIsLoading(true);
 
     try {
@@ -182,6 +202,28 @@ export default function PostForm({ post }: PostFormProps) {
                   </FormItem>
                 )}
               />
+               <FormField
+                  control={form.control}
+                  name="featured"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                      <div className="space-y-0.5">
+                        <FormLabel className="text-base">
+                          Destacar en la Página de Inicio
+                        </FormLabel>
+                        <FormDescription>
+                          Marca esta opción para mostrar esta entrada en la página principal. (Máx. 2)
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
               <FormField
                 control={form.control}
                 name="date"
