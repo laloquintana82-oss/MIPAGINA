@@ -28,14 +28,14 @@ export default async function Home() {
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12 sm:py-16 md:py-20">
-      <section className="text-center">
-        <h1 className="animate-in fade-in slide-in-from-top-4 duration-1000 font-headline text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl">
+      <section className="group text-center cursor-default">
+        <h1 className="font-headline text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl transition-transform duration-300 ease-in-out group-hover:scale-105">
           El Blog de Luis Eduardo
         </h1>
-        <p className="mt-6 animate-in fade-in slide-in-from-top-4 duration-1000 delay-200 text-lg leading-8 text-muted-foreground text-balance">
+        <p className="mt-6 text-lg leading-8 text-muted-foreground text-balance transition-colors duration-300 group-hover:text-foreground/80">
           Un espacio personal donde publico, articulos, ensayos y noticias.
         </p>
-        <p className="mt-2 animate-in fade-in slide-in-from-top-4 duration-1000 delay-300 text-lg leading-8 text-muted-foreground text-balance">
+        <p className="mt-2 text-lg leading-8 text-muted-foreground text-balance transition-colors duration-300 delay-50 group-hover:text-foreground/80">
           BIENVENIDO A MI RINCON DE INTERNET
         </p>
       </section>
