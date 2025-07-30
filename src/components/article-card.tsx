@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -15,10 +16,11 @@ export type Post = {
   date: string;
   excerpt: string;
   tags: string[];
+  imageUrl?: string;
 };
 
 export function ArticleCard(post: Post) {
-  const { slug, title, date, excerpt, tags } = post;
+  const { slug, title, date, excerpt, tags, imageUrl } = post;
   
   const formattedDate = new Date(date).toLocaleDateString("es-ES", {
     year: "numeric",
@@ -28,12 +30,31 @@ export function ArticleCard(post: Post) {
 
   return (
     <Card className="group relative flex h-full flex-col overflow-hidden rounded-lg border-2 border-border transition-transform duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl">
-      <Link href={`/blog/${slug}`} className="absolute inset-0 z-10" aria-label={`Leer más sobre ${title}`}>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-          <div className="absolute right-4 top-4 z-20 translate-x-12 opacity-0 transition-all duration-300 ease-in-out group-hover:translate-x-0 group-hover:opacity-100">
-             <ArrowUpRight className="size-6 text-white" />
-          </div>
+       <Link href={`/blog/${slug}`} className="absolute inset-0 z-10" aria-label={`Leer más sobre ${title}`}>
+        {imageUrl && (
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+        )}
+        <div className="absolute right-4 top-4 z-20 translate-x-12 opacity-0 transition-all duration-300 ease-in-out group-hover:translate-x-0 group-hover:opacity-100">
+            <ArrowUpRight className="size-6 text-white" />
+        </div>
       </Link>
+      
+      {imageUrl ? (
+        <div className="relative aspect-video w-full">
+            <Image
+                src={imageUrl}
+                alt={title}
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                data-ai-hint="post image"
+            />
+        </div>
+      ) : (
+        <div className="absolute right-4 top-4 z-20 text-foreground/50 transition-colors group-hover:text-foreground">
+            <ArrowUpRight className="size-6" />
+        </div>
+      )}
+
       <CardHeader className="z-20">
         <CardTitle className="font-headline text-xl leading-snug">
            <Link href={`/blog/${slug}`} className="hover:underline">
@@ -42,7 +63,7 @@ export function ArticleCard(post: Post) {
         </CardTitle>
       </CardHeader>
       <CardContent className="z-20 flex-grow">
-        <p className="text-muted-foreground">{excerpt}</p>
+        <p className="text-muted-foreground line-clamp-3">{excerpt}</p>
       </CardContent>
       <CardFooter className="z-20 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
          <div className="flex flex-wrap gap-2">

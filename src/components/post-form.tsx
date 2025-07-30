@@ -28,6 +28,7 @@ const postFormSchema = z.object({
   excerpt: z.string().min(1, 'El extracto es obligatorio.'),
   tags: z.string().min(1, 'Las etiquetas son obligatorias.'),
   date: z.string().min(1, 'La fecha es obligatoria.'),
+  imageUrl: z.string().url('Por favor, introduce una URL válida.').optional().or(z.literal('')),
 });
 
 type PostFormValues = z.infer<typeof postFormSchema>;
@@ -62,6 +63,7 @@ export default function PostForm({ post }: PostFormProps) {
       excerpt: post?.excerpt || '',
       tags: post?.tags?.join(', ') || '',
       date: post?.date || new Date().toISOString().split('T')[0],
+      imageUrl: post?.imageUrl || '',
     },
     mode: "onChange",
   });
@@ -73,7 +75,7 @@ export default function PostForm({ post }: PostFormProps) {
     try {
         const slug = (isEditMode && post.slug) ? post.slug : generateSlug(data.title);
 
-        if (!slug) {
+        if (!slug && data.title) {
           toast({
             variant: 'destructive',
             title: 'Error',
@@ -84,10 +86,9 @@ export default function PostForm({ post }: PostFormProps) {
         }
 
         const postData = {
-            title: data.title,
-            excerpt: data.excerpt,
+            ...data,
             tags: data.tags.split(',').map(tag => tag.trim()),
-            date: data.date,
+            imageUrl: data.imageUrl || '',
         };
 
         const docRef = doc(db, 'posts', slug);
@@ -99,6 +100,7 @@ export default function PostForm({ post }: PostFormProps) {
         });
         
         router.push('/admin/posts');
+        router.refresh();
 
     } catch (error: any) {
         console.error('Error al guardar la entrada:', error);
@@ -107,6 +109,7 @@ export default function PostForm({ post }: PostFormProps) {
             title: 'Error',
             description: error.message || 'No se pudo guardar la entrada.',
         });
+    } finally {
         setIsLoading(false);
     }
   };
@@ -146,18 +149,38 @@ export default function PostForm({ post }: PostFormProps) {
                   </FormItem>
                 )}
               />
+               <FormField
+                control={form.control}
+                name="imageUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>URL de la Imagen (Opcional)</FormLabel>
+                    <FormControl>
+                      <Input type="url" placeholder="https://example.com/imagen.png" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Pega la URL de una imagen para mostrarla en el post.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="excerpt"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Extracto</FormLabel>
+                    <FormLabel>Contenido</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Un breve resumen de la entrada..."
+                        placeholder="Escribe aquí el contenido de tu post..."
                         {...field}
+                        rows={10}
                       />
                     </FormControl>
+                    <FormDescription>
+                      Este es el contenido principal de tu entrada.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
