@@ -37,6 +37,7 @@ interface PostFormProps {
 }
 
 const generateSlug = (title: string) => {
+    if (!title) return '';
     return title
         .toString()
         .toLowerCase()
@@ -65,16 +66,16 @@ export default function PostForm({ post }: PostFormProps) {
 
   const onSubmit = async (data: PostFormValues) => {
     setIsLoading(true);
-    let success = false;
     try {
-        const slug = isEditMode && post.slug ? post.slug : generateSlug(data.title);
+        const slug = (isEditMode && post.slug) ? post.slug : generateSlug(data.title);
 
         if (!slug) {
           toast({
             variant: 'destructive',
             title: 'Error',
-            description: 'Could not generate a valid slug from the title.',
+            description: 'Could not generate a valid slug from the title. Please provide a title.',
           });
+          setIsLoading(false); // Reset loading state
           return;
         }
 
@@ -99,7 +100,10 @@ export default function PostForm({ post }: PostFormProps) {
                 description: 'Your new blog post has been successfully created.',
             });
         }
-        success = true;
+        
+        // This will only be reached on success
+        router.push('/admin/posts');
+
     } catch (error: any) {
         console.error('Error saving post:', error);
         toast({
@@ -107,11 +111,7 @@ export default function PostForm({ post }: PostFormProps) {
             title: 'Error',
             description: error.message || 'Failed to save post.',
         });
-    } finally {
-        setIsLoading(false);
-        if (success) {
-           router.push('/admin/posts');
-        }
+        setIsLoading(false); // Reset loading state on error
     }
   };
 
