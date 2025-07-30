@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 async function getRecentPosts(): Promise<Post[]> {
     try {
