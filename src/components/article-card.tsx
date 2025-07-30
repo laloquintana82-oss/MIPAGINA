@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-type ArticleCardProps = {
+export type Post = {
   slug: string;
   title: string;
   date: string;
@@ -16,7 +16,9 @@ type ArticleCardProps = {
   tags: string[];
 };
 
-export function ArticleCard({ slug, title, date, excerpt, tags }: ArticleCardProps) {
+export function ArticleCard(post: Post) {
+  const { slug, title, date, excerpt, tags } = post;
+  
   const formattedDate = new Date(date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -37,7 +39,7 @@ export function ArticleCard({ slug, title, date, excerpt, tags }: ArticleCardPro
       </CardContent>
       <CardFooter className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
          <div className="flex flex-wrap gap-2">
-          {tags.map((tag) => (
+          {tags?.map((tag) => (
             <Badge key={tag} variant="secondary">
               {tag}
             </Badge>

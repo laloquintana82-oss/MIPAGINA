@@ -1,31 +1,28 @@
-import { ArticleCard } from "@/components/article-card";
+import { ArticleCard, type Post } from "@/components/article-card";
 import { Separator } from "@/components/ui/separator";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 
-const recentPosts = [
-  {
-    slug: "the-dawn-of-ai",
-    title: "The Dawn of Artificial Intelligence",
-    date: "2024-07-15",
-    excerpt: "Exploring the rapid advancements in AI and their potential impact on society, creativity, and the future of work.",
-    tags: ["AI", "Technology", "Future"],
-  },
-  {
-    slug: "philosophy-of-mind",
-    title: "A Brief Foray into the Philosophy of Mind",
-    date: "2024-06-28",
-    excerpt: "A contemplative piece on consciousness, the self, and the timeless questions that have puzzled philosophers for centuries.",
-    tags: ["Philosophy", "Consciousness"],
-  },
-  {
-    slug: "minimalist-living",
-    title: "The Art of Minimalist Living",
-    date: "2024-06-10",
-    excerpt: "Discovering joy and clarity by embracing a minimalist lifestyle. Less is not just more; it's a path to freedom.",
-    tags: ["Lifestyle", "Minimalism"],
-  },
-];
 
-export default function Home() {
+async function getRecentPosts(): Promise<Post[]> {
+    try {
+        const postsCollection = collection(db, 'posts');
+        const q = query(postsCollection, orderBy('date', 'desc'), limit(3));
+        const querySnapshot = await getDocs(q);
+        const posts = querySnapshot.docs.map(doc => ({
+            slug: doc.id,
+            ...doc.data()
+        } as Post));
+        return posts;
+    } catch (error) {
+        console.error("Error fetching recent posts: ", error);
+        return [];
+    }
+}
+
+export default async function Home() {
+  const recentPosts = await getRecentPosts();
+
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12 sm:py-16 md:py-20">
       <section className="text-center">

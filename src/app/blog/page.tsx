@@ -1,18 +1,30 @@
-import { ArticleCard } from "@/components/article-card";
+import { ArticleCard, type Post } from "@/components/article-card";
 import { Button } from "@/components/ui/button";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 
-const allPosts = [
-  { slug: "the-dawn-of-ai", title: "The Dawn of Artificial Intelligence", date: "2024-07-15", excerpt: "Exploring the rapid advancements in AI and their potential impact on society, creativity, and the future of work.", tags: ["AI", "Technology", "Future"] },
-  { slug: "philosophy-of-mind", title: "A Brief Foray into the Philosophy of Mind", date: "2024-06-28", excerpt: "A contemplative piece on consciousness, the self, and the timeless questions that have puzzled philosophers for centuries.", tags: ["Philosophy", "Consciousness"] },
-  { slug: "minimalist-living", title: "The Art of Minimalist Living", date: "2024-06-10", excerpt: "Discovering joy and clarity by embracing a minimalist lifestyle. Less is not just more; it's a path to freedom.", tags: ["Lifestyle", "Minimalism"] },
-  { slug: "the-cosmos-within", title: "The Cosmos Within: A Journey Through Stardust", date: "2024-05-22", excerpt: "Reflecting on our connection to the universe and the profound realization that we are made of stardust.", tags: ["Science", "Cosmology"] },
-  { slug: "on-writing", title: "On the Solitude and Joy of Writing", date: "2024-05-05", excerpt: "An essay on the writer's craft, the struggle with the blank page, and the ultimate fulfillment of creation.", tags: ["Writing", "Creativity"] },
-  { slug: "stoic-wisdom", title: "Stoic Wisdom for the Modern Age", date: "2024-04-18", excerpt: "How ancient Stoic principles can help us navigate the complexities and anxieties of contemporary life.", tags: ["Philosophy", "Stoicism", "Lifestyle"] },
-];
+async function getPosts(): Promise<Post[]> {
+    try {
+        const postsCollection = collection(db, 'posts');
+        const q = query(postsCollection, orderBy('date', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const posts = querySnapshot.docs.map(doc => ({
+            slug: doc.id,
+            ...doc.data()
+        } as Post));
+        return posts;
+    } catch (error) {
+        console.error("Error fetching posts: ", error);
+        return [];
+    }
+}
 
-const allCategories = ["All", "AI", "Philosophy", "Lifestyle", "Science", "Technology"];
 
-export default function BlogPage() {
+export default async function BlogPage() {
+    const allPosts = await getPosts();
+
+    const allCategories = ["All", ...new Set(allPosts.flatMap(post => post.tags))];
+
   return (
     <div className="container mx-auto max-w-6xl px-4 py-12 sm:py-16 md:py-20">
       <section className="text-center">

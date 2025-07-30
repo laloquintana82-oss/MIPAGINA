@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function AdminDashboardPage() {
   const { user, loading } = useAuth();
@@ -41,7 +42,9 @@ export default function AdminDashboardPage() {
             <CardDescription>Create, edit, and delete blog articles.</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button disabled>Coming Soon</Button>
+            <Button asChild>
+                <Link href="/admin/posts">Manage Posts</Link>
+            </Button>
           </CardContent>
         </Card>
         <Card>
@@ -50,7 +53,9 @@ export default function AdminDashboardPage() {
             <CardDescription>Update your profile and site-wide settings.</CardDescription>
           </CardHeader>
           <CardContent>
-             <Button disabled>Coming Soon</Button>
+             <Button asChild>
+                <Link href="/admin/settings">Edit Settings</Link>
+             </Button>
           </CardContent>
         </Card>
       </div>
