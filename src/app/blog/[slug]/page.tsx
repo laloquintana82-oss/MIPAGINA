@@ -65,7 +65,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
             </header>
             
             {post.imageUrl && (
-                <div className="relative my-8 aspect-[9/16] w-full max-w-md mx-auto overflow-hidden rounded-lg">
+                <div className="relative my-8 h-96 w-full max-w-2xl mx-auto overflow-hidden rounded-lg">
                     <Image
                         src={post.imageUrl}
                         alt={post.title}

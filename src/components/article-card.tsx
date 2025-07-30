@@ -33,7 +33,7 @@ export function ArticleCard(post: Post) {
        <Link href={`/blog/${slug}`} className="absolute inset-0 z-10" aria-label={`Leer más sobre ${title}`}/>
         
         {imageUrl ? (
-            <div className="relative aspect-[9/16] w-full">
+            <div className="relative h-64 w-full overflow-hidden">
                 <Image
                     src={imageUrl}
                     alt={title}
