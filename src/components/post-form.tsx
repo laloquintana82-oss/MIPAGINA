@@ -19,7 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { doc, setDoc } from 'firebase/firestore';
 import { db, storage } from '@/lib/firebase';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Post } from './article-card';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -73,6 +73,14 @@ export default function PostForm({ post }: PostFormProps) {
     },
     mode: "onChange",
   });
+  
+  const imageUrlValue = form.watch('imageUrl');
+
+  useEffect(() => {
+    if (!imageFile && imageUrlValue) {
+      setImagePreview(imageUrlValue);
+    }
+  }, [imageUrlValue, imageFile]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -103,7 +111,7 @@ export default function PostForm({ post }: PostFormProps) {
           return;
         }
 
-        let finalImageUrl = post?.imageUrl || '';
+        let finalImageUrl = data.imageUrl || '';
         
         if (imageFile) {
             setIsUploading(true);
@@ -187,8 +195,25 @@ export default function PostForm({ post }: PostFormProps) {
                   </FormItem>
                 )}
               />
+                <FormField
+                control={form.control}
+                name="imageUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Enlace de la Imagen</FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://ejemplo.com/imagen.png" {...field} />
+                    </FormControl>
+                     <FormDescription>
+                      Pega aquí la URL de una imagen.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
                <FormItem>
-                <FormLabel>Imagen del Post</FormLabel>
+                <FormLabel>O Sube la Imagen del Post</FormLabel>
                 <FormControl>
                     <Input type="file" accept="image/*" onChange={handleImageChange} />
                 </FormControl>
@@ -203,7 +228,7 @@ export default function PostForm({ post }: PostFormProps) {
                     </div>
                 )}
                 <FormDescription>
-                    Sube una imagen desde tu dispositivo. Si no subes una, no se mostrará ninguna imagen.
+                    Sube una imagen desde tu dispositivo. Si subes una, tendrá prioridad sobre el enlace.
                 </FormDescription>
                 <FormMessage />
                </FormItem>
