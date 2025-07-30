@@ -16,7 +16,7 @@ const navLinks = [
 
 export function Header() {
   const pathname = usePathname();
-  const { user, signOut } = useAuth();
+  const { user, signOut, loading } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -39,7 +39,7 @@ export function Header() {
               {label}
             </Link>
           ))}
-          {user && (
+          {!loading && user && (
             <Link
               href="/admin/dashboard"
               className={cn(
@@ -53,7 +53,7 @@ export function Header() {
         </nav>
         <div className="flex items-center space-x-2">
            <ThemeToggle />
-           {user && <Button onClick={signOut} variant="outline" size="sm">Cerrar Sesión</Button>}
+           {!loading && user && <Button onClick={signOut} variant="outline" size="sm">Cerrar Sesión</Button>}
         </div>
       </div>
     </header>
