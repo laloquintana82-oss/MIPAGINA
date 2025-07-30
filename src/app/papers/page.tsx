@@ -1,30 +1,28 @@
-import { PaperCard } from "@/components/paper-card";
+import { Paper, PaperCard } from "@/components/paper-card";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 
-const papers = [
-  {
-    title: "Quantum Entanglement and its Implications for Information Theory",
-    authors: ["A. Author", "B. Coauthor"],
-    abstract: "This paper explores the fundamental connection between quantum entanglement and classical information theory, proposing a new framework for secure communication channels.",
-    link: "#",
-    year: "2023",
-  },
-  {
-    title: "The Role of Neural Networks in Predicting Protein Folding",
-    authors: ["C. Researcher", "D. Scientist"],
-    abstract: "We present a novel deep learning model that achieves state-of-the-art accuracy in predicting the three-dimensional structure of proteins from their amino acid sequences.",
-    link: "#",
-    year: "2022",
-  },
-  {
-    title: "A Historical Analysis of Economic Bubbles",
-    authors: ["E. Historian"],
-    abstract: "A comprehensive review of major economic bubbles throughout history, identifying common patterns and behavioral biases that contribute to their formation and collapse.",
-    link: "#",
-    year: "2021",
-  },
-];
 
-export default function PapersPage() {
+async function getPapers(): Promise<Paper[]> {
+    try {
+        const papersCollection = collection(db, 'papers');
+        const q = query(papersCollection, orderBy('year', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const papers = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        } as Paper));
+        return papers;
+    } catch (error) {
+        console.error("Error fetching papers: ", error);
+        return [];
+    }
+}
+
+
+export default async function PapersPage() {
+  const papers = await getPapers();
+
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12 sm:py-16 md:py-20">
       <section className="text-center">
@@ -37,8 +35,8 @@ export default function PapersPage() {
       </section>
 
       <section className="mt-12 flex flex-col gap-8">
-        {papers.map((paper, index) => (
-          <PaperCard key={index} {...paper} />
+        {papers.map((paper) => (
+          <PaperCard key={paper.id} {...paper} />
         ))}
       </section>
     </div>

@@ -10,7 +10,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
-type PaperCardProps = {
+export type Paper = {
+  id: string;
   title: string;
   authors: string[];
   abstract: string;
@@ -18,7 +19,7 @@ type PaperCardProps = {
   year: string;
 };
 
-export function PaperCard({ title, authors, abstract, link, year }: PaperCardProps) {
+export function PaperCard({ title, authors, abstract, link, year }: Paper) {
   return (
     <Card className="transition-all hover:shadow-md">
       <CardHeader>
@@ -28,7 +29,7 @@ export function PaperCard({ title, authors, abstract, link, year }: PaperCardPro
           </Link>
         </CardTitle>
         <CardDescription>
-          {authors.join(", ")} &middot; {year}
+          {Array.isArray(authors) ? authors.join(", ") : authors} &middot; {year}
         </CardDescription>
       </CardHeader>
       <CardContent>

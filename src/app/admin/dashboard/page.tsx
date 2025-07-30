@@ -49,6 +49,17 @@ export default function AdminDashboardPage() {
         </Card>
         <Card>
           <CardHeader>
+            <CardTitle>Manage Papers</CardTitle>
+            <CardDescription>Update your academic publications.</CardDescription>
+          </CardHeader>
+          <CardContent>
+             <Button asChild>
+                <Link href="/admin/papers">Manage Papers</Link>
+             </Button>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
             <CardTitle>Site Settings</CardTitle>
             <CardDescription>Update your profile and site-wide settings.</CardDescription>
           </CardHeader>
