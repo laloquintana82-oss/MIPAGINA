@@ -26,7 +26,7 @@ export function Header() {
             El Blog de Luis Eduardo
           </span>
         </Link>
-        <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
+        <nav className="hidden items-center space-x-6 text-sm font-bold md:flex">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
