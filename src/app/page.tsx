@@ -28,15 +28,15 @@ export default async function Home() {
   const featuredPosts = await getFeaturedPosts();
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-12 sm:py-16 md:py-20">
-      <section className="group text-center cursor-default">
-        <h1 className="font-headline text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl transition-transform duration-300 ease-in-out group-hover:scale-105">
+    <div className="container mx-auto max-w-4xl animate-fade-in px-4 py-12 sm:py-16 md:py-20">
+      <section className="text-center">
+        <h1 className="animate-slide-in-from-top-and-fade font-headline text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
           El Blog de Luis Eduardo
         </h1>
-        <p className="mt-6 text-lg leading-8 text-muted-foreground text-balance transition-colors duration-300 group-hover:text-foreground/80">
+        <p className="mt-6 text-lg leading-8 text-muted-foreground text-balance animate-slide-in-from-top-and-fade" style={{ animationDelay: '400ms', animationFillMode: 'backwards' }}>
           Un espacio personal donde publico, articulos, ensayos y noticias.
         </p>
-        <p className="mt-2 text-lg leading-8 text-muted-foreground text-balance transition-colors duration-300 delay-50 group-hover:text-foreground/80">
+        <p className="mt-2 text-lg leading-8 text-muted-foreground text-balance animate-slide-in-from-top-and-fade" style={{ animationDelay: '600ms', animationFillMode: 'backwards' }}>
           BIENVENIDO A MI RINCON DE INTERNET
         </p>
       </section>

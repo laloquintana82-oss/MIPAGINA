@@ -31,14 +31,14 @@ export function ArticleCard(post: Post) {
 
   return (
     <Link href={`/blog/${slug}`} className="group relative block h-full">
-      <Card className="flex h-full flex-col overflow-hidden rounded-lg border-2 border-border transition-transform duration-300 ease-in-out group-hover:-translate-y-1 group-hover:shadow-xl">
+      <Card className="flex h-full flex-col overflow-hidden rounded-lg border-2 border-transparent transition-all duration-300 ease-in-out group-hover:border-primary group-hover:shadow-2xl group-hover:-translate-y-2">
           {imageUrl && (
             <div className="relative h-60 w-full overflow-hidden">
                 <Image
                     src={imageUrl}
                     alt={title}
                     fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
                     data-ai-hint="post image"
                 />
             </div>
@@ -46,17 +46,17 @@ export function ArticleCard(post: Post) {
         
         <div className="absolute right-4 top-4 z-20 flex gap-2">
             {featured && (
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/80 text-primary-foreground backdrop-blur-sm">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/80 text-primary-foreground backdrop-blur-sm">
                     <Star className="size-5" />
                 </div>
             )}
-            <div className="translate-x-12 text-white opacity-0 transition-all duration-300 ease-in-out group-hover:translate-x-0 group-hover:opacity-100 flex h-8 w-8 items-center justify-center rounded-full bg-foreground/50 backdrop-blur-sm">
+            <div className="translate-x-12 text-white opacity-0 transition-all duration-300 ease-in-out group-hover:translate-x-0 group-hover:opacity-100 flex h-10 w-10 items-center justify-center rounded-full bg-foreground/50 backdrop-blur-sm">
               <ArrowUpRight className="size-6" />
             </div>
         </div>
 
         <CardHeader>
-          <CardTitle className="font-headline text-xl leading-snug group-hover:underline">
+          <CardTitle className="font-headline text-2xl leading-snug transition-colors group-hover:text-primary">
             {title}
           </CardTitle>
         </CardHeader>

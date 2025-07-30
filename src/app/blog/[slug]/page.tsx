@@ -65,7 +65,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
             </header>
             
             {post.imageUrl && (
-                <div className="relative my-8 h-96 w-full max-w-2xl mx-auto overflow-hidden rounded-lg">
+                <div className="relative my-12 h-96 w-full max-w-3xl mx-auto overflow-hidden rounded-lg shadow-xl">
                     <Image
                         src={post.imageUrl}
                         alt={post.title}
@@ -78,49 +78,9 @@ export default async function PostPage({ params }: { params: { slug: string } })
             )}
             
             <div 
-                className="prose prose-lg mx-auto max-w-3xl text-foreground dark:prose-invert prose-p:text-justify"
+                className="prose prose-lg mx-auto max-w-3xl text-foreground dark:prose-invert prose-p:text-justify prose-headings:text-foreground prose-a:text-primary hover:prose-a:text-primary/80"
                 dangerouslySetInnerHTML={{ __html: post.excerpt }}
             />
         </article>
     );
-}
-
-// Helper styles for prose
-const proseStyles = `
-.prose {
-    color: var(--foreground);
-}
-.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-    color: var(--foreground);
-}
-.prose a {
-    color: hsl(var(--primary-foreground));
-}
-.prose blockquote {
-    border-left-color: hsl(var(--primary));
-    color: hsl(var(--muted-foreground));
-}
-.prose code {
-    color: hsl(var(--accent-foreground));
-}
-.dark .prose {
-    color: hsl(var(--foreground));
-}
-.dark .prose h1, .dark .prose h2, .dark .prose h3, .dark .prose h4, .dark .prose h5, .dark .prose h6 {
-    color: hsl(var(--foreground));
-}
-.dark .prose a {
-    color: hsl(var(--primary-foreground));
-}
-.dark .prose blockquote {
-    border-left-color: hsl(var(--primary));
-    color: hsl(var(--muted-foreground));
-}
-.dark .prose code {
-    color: hsl(var(--accent-foreground));
-}
-`;
-
-export function GlobalStyles() {
-    return <style>{proseStyles}</style>;
 }
