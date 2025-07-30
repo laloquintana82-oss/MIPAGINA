@@ -108,6 +108,8 @@ export default function PostForm({ post }: PostFormProps) {
             const storageRef = ref(storage, `posts/${slug}-${Date.now()}-${imageFile.name}`);
             const uploadResult = await uploadBytes(storageRef, imageFile);
             finalImageUrl = await getDownloadURL(uploadResult.ref);
+        } else if (isEditMode) {
+          finalImageUrl = post?.imageUrl || '';
         }
 
         const postData = {
