@@ -30,7 +30,7 @@ export default async function PapersPage() {
           Investigación y Publicaciones
         </h1>
         <p className="mt-4 text-lg text-muted-foreground text-balance">
-          Una selección de mi trabajo académico y artículos de investigación.
+          una seleccion de articulos interesantes y de investigacion que recomiendo.
         </p>
       </section>
 
