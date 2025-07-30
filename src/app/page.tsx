@@ -2,12 +2,15 @@ import { ArticleCard, type Post } from "@/components/article-card";
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 
 async function getRecentPosts(): Promise<Post[]> {
     try {
         const postsCollection = collection(db, 'posts');
-        const q = query(postsCollection, orderBy('date', 'desc'), limit(3));
+        const q = query(postsCollection, orderBy('date', 'desc'), limit(2));
         const querySnapshot = await getDocs(q);
         const posts = querySnapshot.docs.map(doc => ({
             slug: doc.id,
@@ -43,10 +46,17 @@ export default async function Home() {
         <h2 className="mb-8 text-center font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
           Entradas Recientes
         </h2>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {recentPosts.map((post) => (
             <ArticleCard key={post.slug} {...post} />
           ))}
+        </div>
+        <div className="mt-12 text-center">
+          <Button asChild>
+            <Link href="/blog">
+              Ver más <ArrowRight className="ml-2" />
+            </Link>
+          </Button>
         </div>
       </section>
     </div>
