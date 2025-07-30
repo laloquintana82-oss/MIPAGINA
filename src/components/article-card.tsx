@@ -33,7 +33,7 @@ export function ArticleCard(post: Post) {
        <Link href={`/blog/${slug}`} className="absolute inset-0 z-10" aria-label={`Leer más sobre ${title}`}/>
         
         {imageUrl ? (
-            <div className="relative aspect-video w-full">
+            <div className="relative aspect-[9/16] w-full">
                 <Image
                     src={imageUrl}
                     alt={title}
@@ -49,17 +49,17 @@ export function ArticleCard(post: Post) {
              <ArrowUpRight className="size-6" />
         </div>
       
-      <CardHeader>
+      <CardHeader className="z-20">
         <CardTitle className="font-headline text-xl leading-snug">
-           <Link href={`/blog/${slug}`} className="relative z-20 hover:underline">
+           <Link href={`/blog/${slug}`} className="relative hover:underline">
             {title}
           </Link>
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex-grow">
+      <CardContent className="flex-grow z-20">
         <p className="text-muted-foreground line-clamp-3">{excerpt}</p>
       </CardContent>
-      <CardFooter className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <CardFooter className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between z-20">
          <div className="flex flex-wrap gap-2">
           {tags?.map((tag) => (
             <Badge key={tag} variant="secondary">
