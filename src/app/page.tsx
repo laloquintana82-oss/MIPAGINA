@@ -46,7 +46,7 @@ export default async function Home() {
         <h2 className="mb-8 text-center font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
           Entradas Recientes
         </h2>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-12">
           {recentPosts.map((post) => (
             <ArticleCard key={post.slug} {...post} />
           ))}
