@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { collection, doc, serverTimestamp, setDoc, addDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -91,7 +91,6 @@ export default function PostForm({ post }: PostFormProps) {
             });
         }
         router.push('/admin/posts');
-        router.refresh();
     } catch (error: any) {
         console.error('Error saving post:', error);
         toast({
