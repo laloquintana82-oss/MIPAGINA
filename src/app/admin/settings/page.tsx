@@ -30,7 +30,7 @@ const settingsFormSchema = z.object({
   paragraph3: z.string().min(1, "Este párrafo es obligatorio."),
   imageUrl: z.string().url("Por favor, introduce una URL válida."),
   linkedinUrl: z.string().url("Por favor, introduce una URL válida."),
-  orcidUrl: z.string().url("Por favor, introduce una URL válida."),
+  instagramUrl: z.string().url("Por favor, introduce una URL válida de Instagram.").optional().or(z.literal('')),
   email: z.string().email("Por favor, introduce un correo electrónico válido."),
 });
 
@@ -51,7 +51,7 @@ export default function SettingsPage() {
       paragraph3: "",
       imageUrl: "",
       linkedinUrl: "",
-      orcidUrl: "",
+      instagramUrl: "",
       email: ""
     },
   });
@@ -196,12 +196,12 @@ export default function SettingsPage() {
               />
                <FormField
                 control={form.control}
-                name="orcidUrl"
+                name="instagramUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>URL de ORCID</FormLabel>
+                    <FormLabel>URL de Instagram</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://orcid.org/tu-id" {...field} />
+                      <Input placeholder="https://instagram.com/tu-perfil" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

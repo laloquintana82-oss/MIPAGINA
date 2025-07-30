@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Linkedin, Mail, FileText } from "lucide-react";
+import { Linkedin, Mail, Instagram } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -12,7 +12,7 @@ interface AboutContent {
   paragraph3: string;
   imageUrl: string;
   linkedinUrl: string;
-  orcidUrl: string;
+  instagramUrl?: string;
   email: string;
 }
 
@@ -33,7 +33,7 @@ async function getAboutContent(): Promise<AboutContent | null> {
                 paragraph3: "Gracias por acompañarme en este viaje de descubrimiento.",
                 imageUrl: "https://placehold.co/400x400.png",
                 linkedinUrl: "#",
-                orcidUrl: "#",
+                instagramUrl: "#",
                 email: "hola@example.com"
             };
         }
@@ -90,11 +90,13 @@ export default async function AboutPage() {
                 <Linkedin className="mr-2 h-4 w-4" /> LinkedIn
               </Link>
             </Button>
-            <Button variant="secondary" asChild>
-              <Link href={content.orcidUrl} target="_blank" rel="noopener noreferrer">
-                <FileText className="mr-2 h-4 w-4" /> ORCID
-              </Link>
-            </Button>
+            {content.instagramUrl && (
+              <Button variant="secondary" asChild>
+                <Link href={content.instagramUrl} target="_blank" rel="noopener noreferrer">
+                  <Instagram className="mr-2 h-4 w-4" /> Instagram
+                </Link>
+              </Button>
+            )}
              <Button variant="secondary" asChild>
               <Link href={`mailto:${content.email}`}>
                 <Mail className="mr-2 h-4 w-4" /> Correo
