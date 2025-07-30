@@ -29,7 +29,7 @@ const settingsFormSchema = z.object({
   paragraph2: z.string().min(1, "Este párrafo es obligatorio."),
   paragraph3: z.string().min(1, "Este párrafo es obligatorio."),
   imageUrl: z.string().url("Por favor, introduce una URL válida."),
-  linkedinUrl: z.string().url("Por favor, introduce una URL válida."),
+  xUrl: z.string().url("Por favor, introduce una URL válida de X/Twitter.").optional().or(z.literal('')),
   instagramUrl: z.string().url("Por favor, introduce una URL válida de Instagram.").optional().or(z.literal('')),
   email: z.string().email("Por favor, introduce un correo electrónico válido."),
 });
@@ -50,7 +50,7 @@ export default function SettingsPage() {
       paragraph2: "",
       paragraph3: "",
       imageUrl: "",
-      linkedinUrl: "",
+      xUrl: "",
       instagramUrl: "",
       email: ""
     },
@@ -67,11 +67,19 @@ export default function SettingsPage() {
       const docRef = doc(db, "content", "about");
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        form.reset(docSnap.data() as SettingsFormValues);
+        const data = docSnap.data();
+        // data migration from linkedinUrl to xUrl
+        if (data.linkedinUrl && !data.xUrl) {
+            data.xUrl = data.linkedinUrl;
+            delete data.linkedinUrl;
+        }
+        form.reset(data as SettingsFormValues);
       }
     };
-    fetchSettings();
-  }, [form]);
+    if (user) {
+        fetchSettings();
+    }
+  }, [user, form.reset]);
 
   const onSubmit = async (data: SettingsFormValues) => {
     setIsLoading(true);
@@ -183,12 +191,12 @@ export default function SettingsPage() {
               />
                 <FormField
                 control={form.control}
-                name="linkedinUrl"
+                name="xUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>URL de LinkedIn</FormLabel>
+                    <FormLabel>URL de X (Twitter)</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://linkedin.com/in/tu-perfil" {...field} />
+                      <Input placeholder="https://x.com/tu-perfil" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

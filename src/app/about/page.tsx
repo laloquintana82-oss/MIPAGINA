@@ -1,9 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Linkedin, Mail, Instagram } from "lucide-react";
+import { Mail, Instagram } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
+
+// SVG for the X logo
+const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        {...props}
+    >
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+);
+
 
 interface AboutContent {
   intro: string;
@@ -11,7 +24,7 @@ interface AboutContent {
   paragraph2: string;
   paragraph3: string;
   imageUrl: string;
-  linkedinUrl: string;
+  xUrl: string;
   instagramUrl?: string;
   email: string;
 }
@@ -32,7 +45,7 @@ async function getAboutContent(): Promise<AboutContent | null> {
                 paragraph2: "Más allá de mi investigación, encuentro consuelo y expresión en la escritura. Este blog es mi lienzo para compartir ideas, explorar temas complejos y participar en un discurso reflexivo. Ya sea que esté analizando un nuevo descubrimiento científico, reflexionando sobre un antiguo texto filosófico o simplemente compartiendo ideas personales, mi objetivo es despertar la curiosidad y fomentar una comprensión más profunda de nuestro mundo.",
                 paragraph3: "Gracias por acompañarme en este viaje de descubrimiento.",
                 imageUrl: "https://placehold.co/400x400.png",
-                linkedinUrl: "#",
+                xUrl: "#",
                 instagramUrl: "#",
                 email: "hola@example.com"
             };
@@ -86,8 +99,8 @@ export default async function AboutPage() {
 
           <div className="mt-8 flex flex-wrap gap-4">
              <Button asChild>
-              <Link href={content.linkedinUrl} target="_blank" rel="noopener noreferrer">
-                <Linkedin className="mr-2 h-4 w-4" /> LinkedIn
+              <Link href={content.xUrl} target="_blank" rel="noopener noreferrer">
+                <XIcon className="mr-2 h-4 w-4" /> X (Twitter)
               </Link>
             </Button>
             {content.instagramUrl && (
