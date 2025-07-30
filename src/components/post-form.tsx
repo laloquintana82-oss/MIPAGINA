@@ -56,6 +56,7 @@ export default function PostForm({ post }: PostFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(post?.imageUrl || null);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -86,7 +87,7 @@ export default function PostForm({ post }: PostFormProps) {
   };
 
   const onSubmit = async (data: PostFormValues) => {
-    if (isLoading) return;
+    if (isLoading || isUploading) return;
     setIsLoading(true);
 
     try {
@@ -105,11 +106,11 @@ export default function PostForm({ post }: PostFormProps) {
         let finalImageUrl = post?.imageUrl || '';
         
         if (imageFile) {
+            setIsUploading(true);
             const storageRef = ref(storage, `posts/${slug}-${Date.now()}-${imageFile.name}`);
             const uploadResult = await uploadBytes(storageRef, imageFile);
             finalImageUrl = await getDownloadURL(uploadResult.ref);
-        } else if (isEditMode) {
-          finalImageUrl = post?.imageUrl || '';
+            setIsUploading(false);
         }
 
         const postData = {
@@ -131,6 +132,7 @@ export default function PostForm({ post }: PostFormProps) {
 
     } catch (error: any) {
         console.error('Error al guardar la entrada:', error);
+        setIsUploading(false);
         toast({
             variant: 'destructive',
             title: 'Error',
@@ -140,6 +142,12 @@ export default function PostForm({ post }: PostFormProps) {
         setIsLoading(false);
     }
   };
+
+  const buttonText = () => {
+    if (isUploading) return 'Subiendo imagen...';
+    if (isLoading) return isEditMode ? 'Guardando...' : 'Creando...';
+    return isEditMode ? 'Guardar Cambios' : 'Crear Entrada';
+  }
 
   return (
     <div className="container mx-auto max-w-2xl px-4 py-12 sm:py-16">
@@ -235,8 +243,8 @@ export default function PostForm({ post }: PostFormProps) {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? (isEditMode ? 'Guardando...' : 'Creando...') : (isEditMode ? 'Guardar Cambios' : 'Crear Entrada')}
+              <Button type="submit" disabled={isLoading || isUploading}>
+                {buttonText()}
               </Button>
             </form>
           </Form>

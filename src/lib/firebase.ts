@@ -6,7 +6,7 @@ import { getStorage } from "firebase/storage";
 const firebaseConfig = {
   projectId: "ethereal-writings",
   appId: "1:205547947082:web:e2bf457f723475fb5052b3",
-  storageBucket: "ethereal-writings.firebasestorage.app",
+  storageBucket: "ethereal-writings.appspot.com",
   apiKey: "AIzaSyC8VklGlxKdlufnCwxD3Y0E73wySGKJLX4",
   authDomain: "ethereal-writings.firebaseapp.com",
   messagingSenderId: "205547947082",
