@@ -11,7 +11,7 @@ const navLinks = [
   { href: "/", label: "Inicio" },
   { href: "/blog", label: "Blog" },
   { href: "/papers", label: "Publicaciones" },
-  { href: "/about", label: "Sobre mí" },
+  { href: "/about", label: "Sobre Luis" },
 ];
 
 export function Header() {
