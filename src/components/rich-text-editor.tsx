@@ -5,6 +5,7 @@ import StarterKit from '@tiptap/starter-kit';
 import TextStyle from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import TextAlign from '@tiptap/extension-text-align';
+import Image from '@tiptap/extension-image';
 import {
   Bold,
   Italic,
@@ -18,11 +19,13 @@ import {
   AlignLeft,
   AlignCenter,
   AlignRight,
+  ImageIcon,
 } from 'lucide-react';
 import { Toggle } from '@/components/ui/toggle';
 import { Separator } from './ui/separator';
 import { Button } from './ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { useCallback } from 'react';
 
 interface RichTextEditorProps {
   value: string;
@@ -42,6 +45,10 @@ const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+      }),
     ],
     content: value,
     editorProps: {
@@ -54,6 +61,15 @@ const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
       onChange(editor.getHTML());
     },
   });
+  
+  const addImage = useCallback(() => {
+    const url = window.prompt('URL');
+
+    if (url) {
+      editor?.chain().focus().setImage({ src: url }).run();
+    }
+  }, [editor]);
+
 
   if (!editor) {
     return null;
@@ -198,7 +214,12 @@ const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
                     </div>
                 </PopoverContent>
             </Popover>
-
+             <Toggle
+                size="sm"
+                onPressedChange={addImage}
+             >
+                <ImageIcon className="h-4 w-4" />
+            </Toggle>
         </FloatingMenu>
       )}
       <EditorContent editor={editor} />
