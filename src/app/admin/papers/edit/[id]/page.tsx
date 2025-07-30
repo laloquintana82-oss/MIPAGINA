@@ -1,12 +1,12 @@
 'use client';
 import PaperForm from '@/components/paper-form';
 import { doc, getDoc } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { db } from '@/lib/firebase';
 import { Paper } from '@/components/paper-card';
 
-export default function EditPaperPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function EditPaperPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [paper, setPaper] = useState<Paper | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

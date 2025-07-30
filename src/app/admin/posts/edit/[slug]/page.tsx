@@ -1,12 +1,12 @@
 'use client';
 import PostForm from '@/components/post-form';
 import { doc, getDoc } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { db } from '@/lib/firebase';
 import { Post } from '@/components/article-card';
 
-export default function EditPostPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default function EditPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params);
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
