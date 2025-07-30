@@ -70,8 +70,8 @@ export default function ManagePostsPage() {
   };
 
   useEffect(() => {
-    if(user) {
-        fetchPosts();
+    if (user) {
+      fetchPosts();
     }
   }, [user]);
 
