@@ -18,10 +18,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { doc, setDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db, storage } from '@/lib/firebase';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Post } from './article-card';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import Image from 'next/image';
 
 const postFormSchema = z.object({
   title: z.string().min(1, 'El título es obligatorio.'),
@@ -42,7 +44,7 @@ const generateSlug = (title: string) => {
     return title
         .toString()
         .toLowerCase()
-        .normalize('NFD') // Normaliza los caracteres a su forma base (ej. 'á' -> 'a')
+        .normalize('NFD') 
         .replace(/[\u0300-\u036f]/g, '')
         .replace(/[^a-z0-9\s-]/g, '') 
         .replace(/\s+/g, '-')           
@@ -54,6 +56,9 @@ export default function PostForm({ post }: PostFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(post?.imageUrl || null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
   const isEditMode = !!post;
 
   const form = useForm<PostFormValues>({
@@ -67,6 +72,18 @@ export default function PostForm({ post }: PostFormProps) {
     },
     mode: "onChange",
   });
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const onSubmit = async (data: PostFormValues) => {
     if (isLoading) return;
@@ -85,10 +102,18 @@ export default function PostForm({ post }: PostFormProps) {
           return;
         }
 
+        let finalImageUrl = post?.imageUrl || '';
+        
+        if (imageFile) {
+            const storageRef = ref(storage, `posts/${slug}-${imageFile.name}`);
+            const uploadResult = await uploadBytes(storageRef, imageFile);
+            finalImageUrl = await getDownloadURL(uploadResult.ref);
+        }
+
         const postData = {
             ...data,
             tags: data.tags.split(',').map(tag => tag.trim()),
-            imageUrl: data.imageUrl || '',
+            imageUrl: finalImageUrl,
         };
 
         const docRef = doc(db, 'posts', slug);
@@ -149,22 +174,26 @@ export default function PostForm({ post }: PostFormProps) {
                   </FormItem>
                 )}
               />
-               <FormField
-                control={form.control}
-                name="imageUrl"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>URL de la Imagen (Opcional)</FormLabel>
-                    <FormControl>
-                      <Input type="url" placeholder="https://example.com/imagen.png" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Pega la URL de una imagen para mostrarla en el post.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
+               <FormItem>
+                <FormLabel>Imagen del Post</FormLabel>
+                <FormControl>
+                    <Input type="file" accept="image/*" onChange={handleImageChange} />
+                </FormControl>
+                {imagePreview && (
+                    <div className="mt-4 relative w-full h-64">
+                    <Image
+                        src={imagePreview}
+                        alt="Vista previa de la imagen"
+                        fill
+                        className="object-contain rounded-md"
+                    />
+                    </div>
                 )}
-              />
+                <FormDescription>
+                    Sube una imagen desde tu dispositivo.
+                </FormDescription>
+                <FormMessage />
+               </FormItem>
               <FormField
                 control={form.control}
                 name="excerpt"
@@ -179,7 +208,7 @@ export default function PostForm({ post }: PostFormProps) {
                       />
                     </FormControl>
                     <FormDescription>
-                      Este es el contenido principal de tu entrada.
+                      Este es el contenido principal de tu entrada. Puedes usar HTML para formatear.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
