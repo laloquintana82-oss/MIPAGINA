@@ -71,6 +71,11 @@ export default function PostForm({ post }: PostFormProps) {
         const slug = isEditMode && post.slug ? post.slug : generateSlug(data.title);
 
         if (!slug) {
+          toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Could not generate a valid slug from the title.',
+          });
           throw new Error("Could not generate a valid slug from the title.");
         }
 
