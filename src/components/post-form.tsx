@@ -90,9 +90,9 @@ export default function PostForm({ post }: PostFormProps) {
     setIsLoading(true);
 
     try {
-        const slug = (isEditMode && post.slug) ? post.slug : generateSlug(data.title);
+        const slug = isEditMode ? post!.slug : generateSlug(data.title);
 
-        if (!slug && !isEditMode) {
+        if (!slug) {
           toast({
             variant: 'destructive',
             title: 'Error',
@@ -105,7 +105,7 @@ export default function PostForm({ post }: PostFormProps) {
         let finalImageUrl = post?.imageUrl || '';
         
         if (imageFile) {
-            const storageRef = ref(storage, `posts/${slug}-${imageFile.name}`);
+            const storageRef = ref(storage, `posts/${slug}-${Date.now()}-${imageFile.name}`);
             const uploadResult = await uploadBytes(storageRef, imageFile);
             finalImageUrl = await getDownloadURL(uploadResult.ref);
         }
