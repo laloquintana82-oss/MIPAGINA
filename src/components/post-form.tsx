@@ -92,7 +92,7 @@ export default function PostForm({ post }: PostFormProps) {
     try {
         const slug = (isEditMode && post.slug) ? post.slug : generateSlug(data.title);
 
-        if (!slug && data.title) {
+        if (!slug && !isEditMode) {
           toast({
             variant: 'destructive',
             title: 'Error',
@@ -155,8 +155,11 @@ export default function PostForm({ post }: PostFormProps) {
                   <FormItem>
                     <FormLabel>Título</FormLabel>
                     <FormControl>
-                      <Input placeholder="El Amanecer de la IA" {...field} />
+                      <Input placeholder="El Amanecer de la IA" {...field} disabled={isEditMode}/>
                     </FormControl>
+                     <FormDescription>
+                      El título no se puede cambiar una vez creada la entrada.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -190,7 +193,7 @@ export default function PostForm({ post }: PostFormProps) {
                     </div>
                 )}
                 <FormDescription>
-                    Sube una imagen desde tu dispositivo.
+                    Sube una imagen desde tu dispositivo. Si no subes una, no se mostrará ninguna imagen.
                 </FormDescription>
                 <FormMessage />
                </FormItem>
