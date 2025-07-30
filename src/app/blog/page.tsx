@@ -29,7 +29,7 @@ export default async function BlogPage() {
     <div className="container mx-auto max-w-6xl px-4 py-12 sm:py-16 md:py-20">
       <section className="text-center">
         <h1 className="font-headline text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-          Desde la Pluma
+          BIENVENIDO A TODOS LOS POST DE LUIS
         </h1>
         <p className="mt-4 text-lg text-muted-foreground text-balance">
           Una colección de artículos y ensayos sobre tecnología, filosofía y vida.
