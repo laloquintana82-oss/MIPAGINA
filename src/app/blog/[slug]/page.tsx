@@ -77,11 +77,10 @@ export default async function PostPage({ params }: { params: { slug: string } })
                 </div>
             )}
             
-            <div className="prose prose-lg mx-auto max-w-3xl text-muted-foreground dark:prose-invert prose-p:text-justify">
-                {post.excerpt.split('\n\n').map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
-                ))}
-            </div>
+            <div 
+                className="prose prose-lg mx-auto max-w-3xl text-muted-foreground dark:prose-invert prose-p:text-justify"
+                dangerouslySetInnerHTML={{ __html: post.excerpt }}
+            />
         </article>
     );
 }
