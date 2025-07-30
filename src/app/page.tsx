@@ -30,7 +30,10 @@ export default async function Home() {
           El Blog de Luis Eduardo
         </h1>
         <p className="mt-6 text-lg leading-8 text-muted-foreground text-balance">
-          Un espacio personal donde publico artículos, ensayos y mis investigaciones académicas. Bienvenido a mi rincón de internet.
+          Un espacio personal donde publico, articulos, ensayos y noticias.
+        </p>
+        <p className="mt-2 text-lg leading-8 text-muted-foreground text-balance">
+          BIENVENIDO A MI RINCON DE INTERNET
         </p>
       </section>
 
