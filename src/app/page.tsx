@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
+export const revalidate = 0;
 
 async function getRecentPosts(): Promise<Post[]> {
     try {
