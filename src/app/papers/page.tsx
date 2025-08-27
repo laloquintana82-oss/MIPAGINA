@@ -2,6 +2,7 @@ import { Paper, PaperCard } from "@/components/paper-card";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 
+export const dynamic = 'force-dynamic';
 
 async function getPapers(): Promise<Paper[]> {
     try {
