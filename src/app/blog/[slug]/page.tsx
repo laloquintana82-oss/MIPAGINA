@@ -8,6 +8,8 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
+export const dynamic = 'force-dynamic';
+
 async function getPost(slug: string): Promise<Post | null> {
     try {
         const docRef = doc(db, 'posts', slug);
