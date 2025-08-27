@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 
+export const dynamic = 'force-dynamic';
+
 async function getPosts(): Promise<Post[]> {
     try {
         const postsCollection = collection(db, 'posts');
@@ -29,7 +31,7 @@ export default async function BlogPage() {
     <div className="container mx-auto max-w-6xl px-4 py-12 sm:py-16 md:py-20">
       <section className="text-center">
         <h1 className="font-headline text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-          BIENVENIDO A TODOS LOS POST DE LUIS
+          Mi Blog
         </h1>
         <p className="mt-4 text-lg text-muted-foreground text-balance">
           Una colección de artículos y ensayos sobre tecnología, filosofía y vida.
