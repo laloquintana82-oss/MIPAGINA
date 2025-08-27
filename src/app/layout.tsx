@@ -6,6 +6,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/context/auth-context";
 import "./globals.css";
 
+// Force dynamic rendering and disable caching
+export const dynamic = 'force-dynamic'
+export const revalidate = 0;
+
+
 export const metadata: Metadata = {
   title: "El Blog de Luis Eduardo",
   description: "Un espacio personal para artículos, ensayos e investigaciones.",
@@ -43,3 +48,4 @@ export default function RootLayout({
     </html>
   );
 }
+
